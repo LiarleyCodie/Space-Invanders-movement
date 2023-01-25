@@ -7,26 +7,26 @@ var frame = 0
 var running = false
 var interval
 
-canvas.width = 256
-canvas.height = 224
-ctx.imageSmoothingEnabled = false
-
-//#region Flux Controls
-// Start game loop
-startBtn.onclick = () => {
-    create()
-    if (!running) {
-        interval = setInterval(update, 1000/fps)
+const CONFIGS = function() {
+    canvas.width = 256
+    canvas.height = 224
+    ctx.imageSmoothingEnabled = false
+}()
+const FLUXCONTROLS = function() {
+    startBtn.onclick = () => {
+        create()
+        if (!running) {
+            interval = setInterval(update, 1000/fps)
+        }
+        running = true
     }
-    running = true
-}
 
-// Stop game loop
-stopBtn.onclick = () => {
-    clearInterval(interval)
-    running = false
+    // Stop game loop
+    stopBtn.onclick = () => {
+        clearInterval(interval)
+        running = false
 }
-//#endregion
+}()
 
 //#region Objects
 function drawBackground() {
@@ -44,7 +44,16 @@ const bullet = {
         ctx.fillRect(this.position.x, this.position.y, this.size.width, this.size.height)
     },
     update: function() {
+        this.position.y -= this.movement.vspeed
         
+        if (player.shootCount > 0) this.movement.vspeed += this.movement.acceleration
+
+        if (this.movement.vspeed >= 5) this.movement.vspeed = 5
+        
+        if (this.position.y < 0 - (this.size.height * 2)) {
+            this.movement.vspeed = 0
+            player.shootCount = 0
+        }
     }
 }
 
@@ -88,6 +97,11 @@ const player = {
                 bullet.position.y = this.position.y
             }
         }
+
+        if (this.shootCount > 0) {
+            bullet.draw()
+            bullet.update()
+        }
     }
 }
 
@@ -105,8 +119,6 @@ function drawCurrentFrame(string, color) {
 // create() will run only once time
 function create() {
     player.position.y = canvas.height - player.size.height
-    bullet.position.x = 40
-    bullet.position.y = 40
 }
 
 // update() will run every time
@@ -115,9 +127,6 @@ function update() {
 
     player.update()
     player.draw()
-    
-    bullet.draw()
-    bullet.update()
 
     drawCurrentFrame(frame, "white")
     frame++

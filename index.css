@@ -30,3 +30,15 @@ button {
     color: grey;
     border-radius: 1rem;
 }
+
+@media screen and (min-width: 640px) {
+    canvas {
+        width: 80%;
+    }
+}
+
+@media screen and (min-width: 720px) {
+    canvas {
+        width: 60%;
+    }
+}
