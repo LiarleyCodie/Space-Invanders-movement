@@ -3,3 +3,5 @@
 
 :cupid: An different thing from the original game is the fact with the airship movement have horizontal acceleration.
 And, like same way, the bullet also have vertical acceleration. By the way, you only can shoot one bullet per time. Use with moderation! :jack_o_lantern:
+
+![Preview](https://i.imgur.com/aixvsqG.gif)
